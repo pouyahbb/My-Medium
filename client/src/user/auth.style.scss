@@ -1,0 +1,42 @@
+.signin {
+	margin-top: 7rem;
+	border: 1px solid #3333;
+	padding: 1rem;
+	border-radius: 4px;
+
+	h1 {
+		display: flex;
+		justify-content: center;
+		margin: 1rem;
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 1rem;
+		font-style: italic;
+	}
+	&__singupBtn {
+		display: flex;
+		color: #333;
+		margin: 1rem;
+		cursor: pointer;
+		width: 33%;
+
+		&:hover {
+			color: #000;
+		}
+	}
+}
+
+.signup {
+	width: 60%;
+	margin: 5rem auto;
+	border: 1px solid #3333;
+	padding: 2rem;
+	border-radius: 4px;
+
+	h1 {
+		display: flex;
+		justify-content: center;
+		border-bottom: 1px solid #eaeaea;
+		padding: 1rem;
+		font-style: italic;
+	}
+}

@@ -1,7 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+
+// Set up redux
+import { Provider } from 'react-redux'
+import store from './redux/store'
 
 // Setup Apollo-Client
 import { ApolloClient } from 'apollo-client'
@@ -14,13 +18,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 const apolloLink = createHttpLink({ uri: 'http://localhost:4444/graphql' })
 
 const client = new ApolloClient({
-  link : apolloLink,
-  cache : new InMemoryCache()
+	link: apolloLink,
+	cache: new InMemoryCache(),
 })
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById('root')
-);
+	<ApolloProvider client={client}>
+		<Provider store={store}>
+			<App />
+		</Provider>
+	</ApolloProvider>,
+	document.getElementById('root')
+)
