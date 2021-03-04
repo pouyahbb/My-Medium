@@ -1,7 +1,7 @@
 exports.typeDefs = `
 
   type Query {
-    hello : String!
+    getAllUsers : [User]!
   }
 
   type Post {
@@ -42,6 +42,8 @@ exports.typeDefs = `
 
   type Mutation {
     signup( name :String! , nickName : String! , email : String! , password : String! , passwordConfirm : String! , profileImage : String , sexually : String) : Token
+    signin(email : String! , password : String! ) : Token
+
   }
 
 `

@@ -36,8 +36,9 @@ const createToken = (user, secret, expiresIn) => {
 
 exports.resolvers = {
 	Query: {
-		hello: () => {
-			return 'Hello world'
+		getAllUsers: async (parent, args, { User }, info) => {
+			let users = await User.find()
+			return users
 		},
 	},
 	Mutation: {
@@ -77,6 +78,17 @@ exports.resolvers = {
 
 			newUser.save()
 			return { token: createToken(newUser, process.env.SECRET, '1hr') }
+		},
+		signin: async (parent, { email, password }, { User }, info) => {
+			let user = await User.findOne({ email })
+			if (!user) {
+				throw new Error('Invalid email or password.')
+			}
+			const isValidPassword = await bcrypt.compare(password, user.password)
+			if (!isValidPassword) {
+				throw new Error('Invalid email or password.')
+			}
+			return { token: createToken(user, process.env.SECRET, '1hr') }
 		},
 	},
 }

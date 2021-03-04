@@ -8,13 +8,15 @@ import { currentUser } from './../redux/actions/index'
  
 import { Mutation } from 'react-apollo'
 import { SIGN_UP } from './../queries/index'
+import defaultImage from './../assets/images/default.jpg'
+
 
 import './auth.style.scss'
 
 class Signup extends Component {
 	state = {
 		name: '',
-		profileImage: '',
+		profileImage: defaultImage,
 		password: '',
 		passwordConfirm: '',
 		email: '',

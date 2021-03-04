@@ -8,6 +8,7 @@ import {
 
 import NavBar from './shared/NavBar'
 import Signup from './user/signup'
+import Signin from './user/signin'
 import MainPage from './mainPage'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
 				<Switch>
 					<Route exact path='/' component={MainPage} />
 					<Route exact path='/signup' component={Signup} />
+					<Route exact path='/signin' component={Signin} />
 					<Redirect to='/' />
 				</Switch>
 			</Router>
