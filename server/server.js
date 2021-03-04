@@ -1,9 +1,13 @@
 const express = require('express')
-require('dotenv').config({ path: 'vat.env' })
+require('dotenv').config({ path: 'var.env' })
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const connectDB = require('./connectDB')
+const User = require('./model/User')
+const Post = require('./model/Post')
+const Comment = require('./model/Comment')
+
 
 // Being on Graphql-Express middleware
 
@@ -38,7 +42,11 @@ app.use(
 	bodyParser.json(),
 	graphqlExpress(() => ({
 		schema,
-		context: {},
+		context: {
+			User,
+			Post,
+			Comment
+		},
 	}))
 )
 
