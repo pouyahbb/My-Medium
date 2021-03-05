@@ -1,0 +1,76 @@
+.profile {
+	border: 1px solid #3333;
+	width: 60%;
+	margin: 5rem auto;
+	padding: 3rem;
+	border-radius: 4px;
+
+	&__text {
+		display: flex;
+		justify-content: center;
+		border-bottom: 1px solid #333;
+		margin-bottom: 2rem;
+		padding-bottom: 2rem;
+		font-style: italic;
+		color: #333;
+	}
+
+	&__image {
+		display: flex;
+		justify-content: center;
+	}
+
+	&__header {
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 3rem;
+		border-bottom: 1px solid #3333;
+		padding: 2rem;
+		font-style: italic;
+
+		&--info {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			strong {
+				cursor: pointer;
+			}
+		}
+	}
+
+	&__notUserSelf {
+		&--header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 5rem;
+			border-bottom: 1px solid #3333;
+			padding-bottom: 2rem;
+		}
+		&--headerRightTop {
+			display: flex;
+			color: #333;
+			font-style: italic;
+		}
+		&--data {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-right: 2rem;
+			margin-bottom: 2rem;
+		}
+		&--btn {
+			display: flex;
+			justify-content: center;
+		}
+		&--posts {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #3333;
+			padding: 2rem;
+			border-radius: 4px;
+		}
+	}
+}

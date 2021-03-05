@@ -90,5 +90,20 @@ exports.resolvers = {
 			}
 			return { token: createToken(user, process.env.SECRET, '1hr') }
 		},
+		addPost : async ( parent , args , { Post , User } , info)  => {
+			const { sharedUser , image , description } = args
+			let newPost = await new Post({
+				sharedUser,
+				image,
+				description,
+			})
+			let findUser = await User.findById(sharedUser)
+			findUser.posts.push(newPost)
+			
+			await newPost.save()
+			await findUser.save()
+			console.log(newPost)
+			return newPost;
+		}
 	},
 }

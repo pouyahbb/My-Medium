@@ -13,7 +13,8 @@ import {
 	Modal,
 	OverlayTrigger,
 	Popover,
-  Alert
+	Alert,
+	Spinner
 } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -53,6 +54,9 @@ class NavBar extends Component {
 				<Query query={GET_ALL_USERS}>
 					{({ data, loading, error }) => {
 						const { getAllUsers } = data
+						if (loading) {
+							return <Spinner animation='border' />
+						}
 						return getAllUsers
 							.filter((data) => {
 								return data._id === type
@@ -60,9 +64,7 @@ class NavBar extends Component {
 							.map((user) => {
 								return (
 									<div key={user.id} className='navBar__modal'>
-										{loading ? (
-											<h1> Loading... </h1>
-										) : error ? (
+										{error ? (
 											<Alert variant='danger'> {error.message} </Alert>
 										) : (
 											<React.Fragment>
@@ -74,14 +76,15 @@ class NavBar extends Component {
 														thumbnail
 														style={{ width: '20%', cursor: 'pointer' }}
 														onClick={() => {
-															this.props.history.push(`/${user.id}/profile`)
+															
+															this.props.history.push(`/${user._id}/profile`)
 															this.setState({ modal: false })
 														}}
 													/>
 													<div className='navBar__modal--userName'>
 														<strong
 															onClick={() => {
-																this.props.history.push(`/${user.id}/profile`)
+																this.props.history.push(`/${user._id}/profile`)
 																this.setState({ modal: false })
 															}}
 														>
@@ -124,6 +127,8 @@ class NavBar extends Component {
 		this.setState({ modal: false })
 	}
 
+	
+
 	showContent = () => {
 		if (!this.props.user) {
 			return (
@@ -143,6 +148,12 @@ class NavBar extends Component {
 				<React.Fragment>
 					<Query query={GET_ALL_USERS}>
 						{({ data, loading, error }) => {
+							if (loading) {
+								return <Spinner animation='border' />
+							}
+							if (error) {
+								return <Alert variant='danger'> {error.message} </Alert>
+							}
 							const { getAllUsers } = data
 							return (
 								<OverlayTrigger
@@ -161,7 +172,7 @@ class NavBar extends Component {
 													return (
 														<Popover.Content
 															onClick={() => {
-																this.props.history.push(`${user.id}/profile`)
+																this.props.history.push(`${user._id}/profile`)
 																this.setState({ searchTerm: '' })
 															}}
 															key={user.nickName}
@@ -204,7 +215,7 @@ class NavBar extends Component {
 					<Nav.Link name='followings' onClick={this.showModal}>
 						Followings
 					</Nav.Link>
-					<LinkContainer to={`/${this.props.user.id}/posts`}>
+					<LinkContainer to={`/${this.props.user._id}/posts`}>
 						<Nav.Link>My Posts</Nav.Link>
 					</LinkContainer>
 					<NavDropdown title={this.props.user.name} id='basic-nav-dropdown'>
@@ -220,7 +231,7 @@ class NavBar extends Component {
 						</Nav.Link>
 					</LinkContainer>
 					<LinkContainer
-						to={`/${this.props.user.id}/profile`}
+						to={`/${this.props.user._id}/profile`}
 						style-={{ width: '5%', cursor: 'pointer' }}
 					>
 						<Image
