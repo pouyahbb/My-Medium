@@ -34,10 +34,16 @@ const createToken = (user, secret, expiresIn) => {
 	)
 }
 
+// fix the getall users post field that save like id but woe neede populate it
+
 exports.resolvers = {
 	Query: {
 		getAllUsers: async (parent, args, { User }, info) => {
-			let users = await User.find()
+			let users = await User.find().populate({
+				path: 'posts',
+				model: 'Post',
+			})
+			console.log(users)
 			return users
 		},
 	},
@@ -90,20 +96,57 @@ exports.resolvers = {
 			}
 			return { token: createToken(user, process.env.SECRET, '1hr') }
 		},
-		addPost : async ( parent , args , { Post , User } , info)  => {
-			const { sharedUser , image , description } = args
+		addPost: async (parent, args, { Post, User }, info) => {
+			const { sharedUser, image, description } = args
 			let newPost = await new Post({
 				sharedUser,
 				image,
 				description,
 			})
+
 			let findUser = await User.findById(sharedUser)
 			findUser.posts.push(newPost)
-			
+
 			await newPost.save()
 			await findUser.save()
-			console.log(newPost)
-			return newPost;
-		}
+			return newPost
+		},
+		updateUserProfile: async (parent, args, { User }, info) => {
+			const {
+				name,
+				nickName,
+				email,
+				password,
+				passwordConfirm,
+				profileImage,
+				sexually, 
+				_id
+			} = args
+
+
+			let user = await User.findOne({ _id })
+
+			let userExistWithEmail = await User.findOne({ email });
+			if(userExistWithEmail){
+				throw new Error('Email address already exists.')
+			}
+			let userExistWithNickName = await User.findOne({ nickName })
+			if(userExistWithNickName){
+				throw new Error('NickName already exists')
+			}
+
+			user.name = name || user.name;
+			user.nickName = nickName || user.nickName
+			user.email = email || user.email
+			user.password = password || user.password;
+			user.passwordConfirm = passwordConfirm || user.passwordConfirm;
+			user.profileImage = profileImage || user.profileImage;
+			user.sexually = sexually || user.sexually;
+
+			await user.save();
+			return {
+				token: createToken(user, process.env.SECRET, '1hr'),
+			}
+		},
 	},
 }

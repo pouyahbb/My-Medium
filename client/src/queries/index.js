@@ -15,7 +15,7 @@ export const GET_ALL_USERS = gql`
 			followers
 			followings
 			posts {
-				postId
+				_id
 				sharedUser
 				image
 				createdAt
@@ -62,6 +62,33 @@ export const SIGN_UP = gql`
 export const SIGNIN = gql`
 	mutation($email: String!, $password: String!) {
 		signin(email: $email, password: $password) {
+			token
+		}
+	}
+`
+
+
+export const UPDATE_USER = gql`
+	mutation(
+		$_id : ID!
+		$name: String
+		$nickName: String
+		$password: String
+		$passwordConfirm: String
+		$email: String
+		$sexually: String
+		$profileImage: String
+	) {
+		updateUserProfile(
+			_id : $_id
+			name: $name
+			nickName: $nickName
+			email: $email
+			password: $password
+			passwordConfirm: $passwordConfirm
+			sexually: $sexually
+			profileImage: $profileImage
+		) {
 			token
 		}
 	}

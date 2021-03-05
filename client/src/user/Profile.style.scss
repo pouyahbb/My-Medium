@@ -73,4 +73,8 @@
 			border-radius: 4px;
 		}
 	}
+	&__footer{
+		display : flex;
+		justify-content: space-around;
+	}
 }

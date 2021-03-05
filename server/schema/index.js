@@ -6,11 +6,11 @@ exports.typeDefs = `
 
   type Post {
     _id : ID
-    sharedUser : ID!  
+    sharedUser : ID
     image : String!
-    createdAt : String!
+    createdAt : String
     description : String!
-    likes : [String]!
+    likes : [String]
     comments : [Comment]
   }
 
@@ -43,7 +43,9 @@ exports.typeDefs = `
   type Mutation {
     signup( name :String! , nickName : String! , email : String! , password : String! , passwordConfirm : String! , profileImage : String , sexually : String) : Token
     signin(email : String! , password : String! ) : Token
+    updateUserProfile( _id : ID! ,  name : String , nickName : String , email : String , password : String , passwordConfirm : String , profileImage : String , sexually : String) : Token
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
+
   }
 
 `

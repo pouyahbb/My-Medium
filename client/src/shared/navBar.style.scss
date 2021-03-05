@@ -28,6 +28,13 @@
 	&__search {
 		width: 40%;
 	}
+	&__tooltip {
+		&--rightSide {
+			display: flex;
+			justify-content: space-between;
+			width: 77%;
+		}
+	}
 
 	&__modal {
 		display: flex;
@@ -95,7 +102,7 @@
 	overflow-x: auto;
 	cursor: pointer;
 
-	&:hover{
-		background-color : #3333
+	&:hover {
+		background-color: #3333;
 	}
 }
