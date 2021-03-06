@@ -44,6 +44,7 @@ exports.typeDefs = `
     signup( name :String! , nickName : String! , email : String! , password : String! , passwordConfirm : String! , profileImage : String , sexually : String) : Token
     signin(email : String! , password : String! ) : Token
     updateUserProfile( _id : ID! ,  name : String , nickName : String , email : String , password : String , passwordConfirm : String , profileImage : String , sexually : String) : Token
+    deleteUser(_id : ID!) : ID!
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
 
   }

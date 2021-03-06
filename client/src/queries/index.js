@@ -58,7 +58,6 @@ export const SIGN_UP = gql`
 	}
 `
 
-
 export const SIGNIN = gql`
 	mutation($email: String!, $password: String!) {
 		signin(email: $email, password: $password) {
@@ -67,10 +66,9 @@ export const SIGNIN = gql`
 	}
 `
 
-
 export const UPDATE_USER = gql`
 	mutation(
-		$_id : ID!
+		$_id: ID!
 		$name: String
 		$nickName: String
 		$password: String
@@ -80,7 +78,7 @@ export const UPDATE_USER = gql`
 		$profileImage: String
 	) {
 		updateUserProfile(
-			_id : $_id
+			_id: $_id
 			name: $name
 			nickName: $nickName
 			email: $email
@@ -90,6 +88,12 @@ export const UPDATE_USER = gql`
 			profileImage: $profileImage
 		) {
 			token
-		}
+		}	
+	}
+`
+
+export const DELETE_USER = gql`
+	mutation($_id : ID!) {
+		deleteUser(_id: $_id)
 	}
 `

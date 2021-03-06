@@ -39,6 +39,7 @@ class Signup extends Component {
 		this.setState({ [name]: value })
 	}
 
+
 	handleSubmit = (event, signup) => {
 		event.preventDefault()
 		signup()

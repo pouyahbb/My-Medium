@@ -14,7 +14,7 @@ import {
 	OverlayTrigger,
 	Popover,
 	Alert,
-	Spinner
+	Spinner,
 } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -76,7 +76,6 @@ class NavBar extends Component {
 														thumbnail
 														style={{ width: '20%', cursor: 'pointer' }}
 														onClick={() => {
-															
 															this.props.history.push(`/${user._id}/profile`)
 															this.setState({ modal: false })
 														}}
@@ -126,8 +125,6 @@ class NavBar extends Component {
 	handleClose = () => {
 		this.setState({ modal: false })
 	}
-
-	
 
 	showContent = () => {
 		if (!this.props.user) {

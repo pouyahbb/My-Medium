@@ -119,34 +119,46 @@ exports.resolvers = {
 				password,
 				passwordConfirm,
 				profileImage,
-				sexually, 
-				_id
+				sexually,
+				_id,
 			} = args
-
 
 			let user = await User.findOne({ _id })
 
-			let userExistWithEmail = await User.findOne({ email });
-			if(userExistWithEmail){
+			if (!user) {
+				throw new Error('User not found.')
+			}
+
+			let userExistWithEmail = await User.findOne({ email })
+			if (userExistWithEmail) {
 				throw new Error('Email address already exists.')
 			}
 			let userExistWithNickName = await User.findOne({ nickName })
-			if(userExistWithNickName){
+			if (userExistWithNickName) {
 				throw new Error('NickName already exists')
 			}
 
-			user.name = name || user.name;
+			user.name = name || user.name
 			user.nickName = nickName || user.nickName
 			user.email = email || user.email
-			user.password = password || user.password;
-			user.passwordConfirm = passwordConfirm || user.passwordConfirm;
-			user.profileImage = profileImage || user.profileImage;
-			user.sexually = sexually || user.sexually;
+			user.password = password || user.password
+			user.passwordConfirm = passwordConfirm || user.passwordConfirm
+			user.profileImage = profileImage || user.profileImage
+			user.sexually = sexually || user.sexually
 
-			await user.save();
+			await user.save()
 			return {
 				token: createToken(user, process.env.SECRET, '1hr'),
 			}
+		},
+		deleteUser: async (parent, { _id }, { User }, info) => {
+			let user = await User.findOneAndRemove({ _id })
+			if (!user) {
+				throw new Error('User not found.')
+			}
+			
+
+			return user._id
 		},
 	},
 }

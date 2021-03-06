@@ -9,11 +9,12 @@ import {
 	Modal,
 	FormControl,
 	Spinner,
+	Alert
 } from 'react-bootstrap'
 import jwt from 'jsonwebtoken'
 
 import { Mutation } from 'react-apollo'
-import { UPDATE_USER } from './../../queries/index'
+import { UPDATE_USER, DELETE_USER } from './../../queries/index'
 
 import { currentUser } from './../../redux/actions/index'
 
@@ -45,6 +46,17 @@ class UserSelfProfile extends Component {
 			reader.readAsDataURL(event.target.files[0])
 		}
 		this.setState({ isChange: true })
+	}
+
+	deleteUserHandler = (e , deleteUser) => {
+		e.preventDefault()
+		deleteUser().then(async({data}) => {
+			const { deleteUser } =data;
+			this.props.history.push('/signin')
+			this.props.currentUser(null)
+		}).catch(err => {
+			throw new Error(err.message)
+		})
 	}
 	handleSubmit = (event, updateUserProfile) => {
 		event.preventDefault()
@@ -121,24 +133,61 @@ class UserSelfProfile extends Component {
 							</h5>
 						</Modal.Body>
 						<Modal.Footer>
-							<FormControl
-								type='text'
-								placeholder='Write your name'
-								className='mr-sm-2'
-								onChange={this.modalHandleChange}
-								name='usernameForModal'
-								value={this.state.usernameForModal}
-								autoFocus
-								style={{ width: '67%' }}
-							/>
-							<Button
-								disabled={
-									this.state.usernameForModal === user.name ? false : true
-								}
-								variant='danger'
+							<Mutation
+								mutation={DELETE_USER}
+								variables={{ _id: this.props.user._id }}
 							>
-								Delete Account
-							</Button>
+								{(deleteUser, { data, loading, error }) => {
+									return (
+										<Form
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												width: ' 100%',
+											}}
+											onSubmit={(event) =>
+												this.deleteUserHandler(event, deleteUser)
+											}
+										>
+											{error && (
+												<Alert variant='danger'>
+													{error.message.split(':')[1]}
+												</Alert>
+											)}
+											<FormControl
+												type='text'
+												placeholder='Write your name'
+												className='mr-sm-2'
+												onChange={this.modalHandleChange}
+												name='usernameForModal'
+												value={this.state.usernameForModal}
+												autoFocus
+												style={{ width: '67%' }}
+											/>
+											<Button
+												disabled={
+													this.state.usernameForModal === user.name
+														? false
+														: true
+												}
+												variant='danger'
+												type='submit'
+												onSubmit={this.userDeleteHandler}
+											>
+												{loading ? (
+													<Spinner animation='border' />
+												) : (
+													'Delete Account'
+												)}
+											</Button>
+										</Form>
+									)
+								}}
+							</Mutation>
+
+							{/* )
+									}}
+								</Mutation> */}
 						</Modal.Footer>
 					</Modal>
 				) : (
@@ -162,6 +211,11 @@ class UserSelfProfile extends Component {
 										this.handleSubmit(event, updateUserProfile)
 									}
 								>
+									{error && (
+										<Alert variant='danger'>
+											{error.message.split(':')[1]}
+										</Alert>
+									)}
 									<h1 className='profile__text'> Your Profile Information </h1>
 									<div className='profile__header'>
 										<div className='profile__header--info'>
@@ -277,7 +331,7 @@ class UserSelfProfile extends Component {
 										>
 											<option>None</option>
 											<option>Male</option>
-											<option>Femail</option>
+											<option>Female</option>
 										</Form.Control>
 									</Form.Group>
 									<div className='profile__footer'>
