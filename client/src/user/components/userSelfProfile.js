@@ -22,11 +22,11 @@ class UserSelfProfile extends Component {
 	state = {
 		profileImage: this.props.user.profileImage,
 		name: this.props.user.name,
-		nickName: '',
+		nickName: this.props.user.nickName,
 		password: '',
 		passwordConfirm: '',
 		sexually: this.props.user.sexually,
-		email: '',
+		email: this.props.user.email,
 		isChange: false,
 		modal: false,
 		usernameForModal: '',

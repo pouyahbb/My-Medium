@@ -88,12 +88,82 @@ export const UPDATE_USER = gql`
 			profileImage: $profileImage
 		) {
 			token
-		}	
+		}
 	}
 `
 
 export const DELETE_USER = gql`
-	mutation($_id : ID!) {
+	mutation($_id: ID!) {
 		deleteUser(_id: $_id)
 	}
 `
+
+export const FOLLOW = gql`
+	mutation($targetUserId: ID!, $currentUserId: ID!) {
+		follow(targetUserId: $targetUserId, currentUserId: $currentUserId) {
+			_id
+			name
+			nickName
+			email
+			password
+			passwordConfirm
+			profileImage
+			sexually
+			followers
+			followings
+			posts {
+				_id
+				sharedUser
+				image
+				createdAt
+				description
+				likes
+				comments {
+					userId
+					text
+					createdAt
+				}
+			}
+			joinDate
+		}
+	}
+`
+
+export const UNFOLLOW = gql`
+	mutation($currentUserId: ID!, $targetUserId: ID!) {
+		unFollow(currentUserId: $currentUserId, targetUserId: $targetUserId) {
+			_id
+			name
+			nickName
+			email
+			password
+			passwordConfirm
+			profileImage
+			sexually
+			followers
+			followings
+			followers
+			posts {
+				_id
+				sharedUser
+				image
+				createdAt
+				description
+				likes
+				comments {
+					userId
+					text
+					createdAt
+				}
+			}
+		}
+	}
+`
+
+// export const FOLLOW_USER = gql`
+// 	mutation($_id: ID!, $followType: String!, $currentUserId: ID!) {
+// 		follow(_id: $_id, followType: $followType, currentUserId: $currentUserId) {
+// 			token
+// 		}
+// 	}
+// `

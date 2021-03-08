@@ -45,6 +45,8 @@ exports.typeDefs = `
     signin(email : String! , password : String! ) : Token
     updateUserProfile( _id : ID! ,  name : String , nickName : String , email : String , password : String , passwordConfirm : String , profileImage : String , sexually : String) : Token
     deleteUser(_id : ID!) : ID!
+    follow(targetUserId : ID! , currentUserId : ID!) : User
+    unFollow(targetUserId : ID! , currentUserId : ID!) : User
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
 
   }

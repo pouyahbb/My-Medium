@@ -156,9 +156,48 @@ exports.resolvers = {
 			if (!user) {
 				throw new Error('User not found.')
 			}
-			
 
 			return user._id
+		},
+		follow: async (parent, { targetUserId, currentUserId }, { User }) => {
+			let currentUser = await User.findById(currentUserId)
+			let targetUser = await User.findById(targetUserId)
+
+			if (!targetUser) {
+				throw new Error('User not found.')
+			}
+			await currentUser.followings.push(targetUser._id)
+			await targetUser.followers.push(currentUser._id)
+			await targetUser.save()
+			await currentUser.save()
+			return targetUser
+		},
+		unFollow: async (
+			parent,
+			{ targetUserId, currentUserId },
+			{ User },
+			info
+		) => {
+			let currentUser = await User.findById(currentUserId)
+			let targetUser = await User.findById(targetUserId)
+			let removeFromCurrentUser = await currentUser.followings.indexOf(
+				targetUserId
+			)
+			let removeFromTargetUser = await targetUser.followers.indexOf(
+				currentUserId
+			)
+
+			if (!targetUser) {
+				throw new Error('User not found.')
+			}
+
+			if (removeFromCurrentUser > -1) {
+				await currentUser.followings.splice(removeFromCurrentUser, 1)
+				await targetUser.followers.splice(removeFromTargetUser, 1)
+				await currentUser.save()
+				await targetUser.save()
+			}
+			return targetUser
 		},
 	},
 }
