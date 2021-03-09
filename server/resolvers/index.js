@@ -46,6 +46,11 @@ exports.resolvers = {
 			console.log(users)
 			return users
 		},
+		getCurrentUser : async (parent , { _id } , { User } , info) => {
+			let user = await User.findById({_id});
+			console.log(user)
+			return user
+		}
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {
@@ -176,7 +181,7 @@ exports.resolvers = {
 				await targetUser.followers.push(currentUser._id)
 				await targetUser.save()
 				await currentUser.save()
-				return targetUser
+				return currentUser
 			} else if (value === 'unFollow') {
 				let removeFromCurrentUser = await currentUser.followings.indexOf(
 					targetUserId
@@ -190,35 +195,9 @@ exports.resolvers = {
 					await currentUser.save()
 					await targetUser.save()
 				}
+				return currentUser
 			}
-			return targetUser
+			return currentUser
 		},
-		// unFollow: async (
-		// 	parent,
-		// 	{ targetUserId, currentUserId },
-		// 	{ User },
-		// 	info
-		// ) => {
-		// 	let currentUser = await User.findById(currentUserId)
-		// 	let targetUser = await User.findById(targetUserId)
-		// 	let removeFromCurrentUser = await currentUser.followings.indexOf(
-		// 		targetUserId
-		// 	)
-		// 	let removeFromTargetUser = await targetUser.followers.indexOf(
-		// 		currentUserId
-		// 	)
-
-		// 	if (!targetUser) {
-		// 		throw new Error('User not found.')
-		// 	}
-
-		// 	if (removeFromCurrentUser > -1) {
-		// 		await currentUser.followings.splice(removeFromCurrentUser, 1)
-		// 		await targetUser.followers.splice(removeFromTargetUser, 1)
-		// 		await currentUser.save()
-		// 		await targetUser.save()
-		// 	}
-		// 	return targetUser
-		// },
 	},
 }

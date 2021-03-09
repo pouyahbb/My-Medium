@@ -32,6 +32,37 @@ export const GET_ALL_USERS = gql`
 	}
 `
 
+export const GET_CURRENT_USER = gql`
+	query($_id: ID!) {
+		getCurrentUser(_id: $_id) {
+			_id
+			name
+			nickName
+			email
+			password
+			passwordConfirm
+			profileImage
+			sexually
+			followers
+			followings
+			posts {
+				_id
+				sharedUser
+				image
+				createdAt
+				description
+				likes
+				comments {
+					userId
+					text
+					createdAt
+				}
+			}
+			joinDate
+		}
+	}
+`
+
 // Mutations
 
 export const SIGN_UP = gql`

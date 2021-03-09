@@ -2,6 +2,7 @@ exports.typeDefs = `
 
   type Query {
     getAllUsers : [User]!
+    getCurrentUser(_id : ID!) : User
   }
 
   type Post {
@@ -49,8 +50,4 @@ exports.typeDefs = `
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
     
   }
-  
   `
-
-// unFollow(targetUserId : ID! , currentUserId : ID!) : User
-// follow(targetUserId : ID! , currentUserId : ID!) : User

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { currentUser } from './../../redux/actions/index'
 import { Image, Button, Card, Spinner, Alert } from 'react-bootstrap'
 
 import { Mutation } from 'react-apollo'
@@ -14,30 +15,19 @@ class UserNotSelfProfile extends Component {
 	state = {
 		error: false,
 		errorMessage: '',
-		follow: this.props.currentUser.followings.includes(
-			this.props.match.params.userId
-		)
+		follow: this.props.user.followings.includes(this.props.match.params.userId)
 			? true
 			: false,
 	}
-
-	// when change the follow type the DOM not updated. fix it
-	// handleUnFollow = async (event, unfollow) => {
-	// 	event.preventDefault()
-	// 	await unfollow()
-	// 		.then(({ data }) => {
-	// 			console.log(data)
-	// 		})
-	// 		.catch((err) => {
-	// 			throw new Error(err.message)
-	// 		})
-	// }
 
 	handleFollow = async (event, follow) => {
 		event.preventDefault()
 		await follow()
 			.then(({ data }) => {
+				let { follow } = data;
+				this.props.currentUser(follow);
 				console.log(data)
+				
 				this.setState({ follow: !this.state.follow })
 			})
 			.catch((err) => {
@@ -46,97 +36,43 @@ class UserNotSelfProfile extends Component {
 	}
 
 	render() {
-		const { user, users } = this.props
-		console.log(this.props)
+		const { targetUser, users } = this.props
+		console.log(this.props.targetUser)
 		return (
-			<React.Fragment key={user._id}>
+			<React.Fragment key={targetUser._id}>
 				{this.state.error && (
 					<Alert variant='danger'> {this.state.errorMessage} </Alert>
 				)}
 				<div className='profile__notUserSelf--header'>
 					<div className='profile__notUserSelf--headerLeft'>
 						<Image
-							src={user.profileImage}
-							alt={user.name}
+							src={targetUser.profileImage}
+							alt={targetUser.name}
 							thumbnail
 							roundedCircle
 							style={{ width: '40%' }}
 						/>
-						<strong> {user.name} </strong>
+						<strong> {targetUser.name} </strong>
 					</div>
 					<div className='profile__notUserSelf--headerRight'>
 						<div className='profile__notUserSelf--headerRightTop'>
 							<div className='profile__notUserSelf--data'>
 								<strong>Followings </strong>
-								<span> {user.followings.length}</span>
+								<span> {targetUser.followings.length}</span>
 							</div>
 							<div className='profile__notUserSelf--data'>
 								<strong>Followers </strong>
-								<span> {user.followers.length}</span>
+								<span> {targetUser.followers.length}</span>
 							</div>
 							<div className='profile__notUserSelf--data'>
 								<strong>Posts </strong>
-								<span> {user.posts.length}</span>
+								<span> {targetUser.posts.length}</span>
 							</div>
 						</div>
 						<div className='profile__notUserSelf--btn'>
-							{/* {this.props.currentUser.followings.includes(user._id) ? (
-								<Mutation
-									variables={{
-										currentUserId: this.props.currentUser._id,
-										targetUserId: this.props.match.params.userId,
-									}}
-									mutation={UNFOLLOW}
-								>
-									{(unfollow, { data, loading, error }) => {
-										if (error) {
-											this.setState({
-												error: true,
-												errorMessage: error.message,
-											})
-										}
-										return (
-											<Button
-												onClick={(event) =>
-													this.handleUnFollow(event, unfollow)
-												}
-												variant='danger'
-											>
-												{loading ? <Spinner animation='border' /> : 'UnFollow'}
-											</Button>
-										)
-									}}
-								</Mutation>
-							) : (
-								<Mutation
-									variables={{
-										currentUserId: this.props.currentUser._id,
-										targetUserId: this.props.match.params.userId,
-									}}
-									mutation={FOLLOW}
-								>
-									{(follow, { data, loading, error }) => {
-										if (error) {
-											this.setState({
-												error: true,
-												errorMessage: error.message,
-											})
-										}
-										return (
-											<Button
-												onClick={(event) => this.handleFollow(event, follow)}
-												variant='success'
-											>
-												{loading ? <Spinner animation='border' /> : 'Follow'}
-											</Button>
-										)
-									}}
-								</Mutation>
-							)} */}
-
 							<Mutation
 								variables={{
-									currentUserId: this.props.currentUser._id,
+									currentUserId: this.props.user._id,
 									targetUserId: this.props.match.params.userId,
 									value: this.state.follow ? 'unFollow' : 'follow',
 								}}
@@ -163,7 +99,7 @@ class UserNotSelfProfile extends Component {
 					</div>
 				</div>
 				<div className='profile__notUserSelf--posts'>
-					{user.posts.map((post) => {
+					{targetUser.posts.map((post) => {
 						return (
 							<Card
 								style={{ width: '50%' }}
@@ -174,12 +110,12 @@ class UserNotSelfProfile extends Component {
 							>
 								<CardHeader
 									users={users}
-									user={user}
+									user={targetUser}
 									post={post}
 									showDropDowns={false}
 								/>
 								<CardBody post={post} />
-								<CardFooter users={users} post={post} user={user} />
+								<CardFooter users={users} post={post} user={targetUser} />
 							</Card>
 						)
 					})}
@@ -190,7 +126,7 @@ class UserNotSelfProfile extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return { currentUser: state.currentUser.currentUser }
+	return { user: state.currentUser.currentUser }
 }
 
-export default connect(mapStateToProps)(withRouter(UserNotSelfProfile))
+export default connect(mapStateToProps , { currentUser })(withRouter(UserNotSelfProfile))

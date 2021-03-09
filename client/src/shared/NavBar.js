@@ -33,6 +33,8 @@ class NavBar extends Component {
 		hideTooltip: false,
 	}
 
+	
+
 	handleHideTooltip = () => {
 		if (this.state.searchTerm.length > 0) {
 			return this.setState({ hideTooltip: false })
@@ -63,7 +65,7 @@ class NavBar extends Component {
 							})
 							.map((user) => {
 								return (
-									<div key={user.id} className='navBar__modal'>
+									<div key={user._id} className='navBar__modal'>
 										{error ? (
 											<Alert variant='danger'> {error.message} </Alert>
 										) : (
@@ -106,8 +108,11 @@ class NavBar extends Component {
 		})
 	}
 
+
+
 	showModal = (e) => {
 		const { name } = e.target
+		
 		this.setState({ modal: true })
 		if (name === 'followings') {
 			this.setState({

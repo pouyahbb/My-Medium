@@ -34,8 +34,14 @@ class Profile extends Component {
 									.filter((data) => {
 										return data._id === this.props.match.params.userId
 									})
-									.map((user) => {
-										return <UserNotProfileSelf users={getAllUsers} user={user} key={user._id} />
+									.map((targetUser) => {
+										return (
+											<UserNotProfileSelf
+												users={getAllUsers}
+												targetUser={targetUser}
+												key={targetUser._id}
+											/>
+										)
 									})
 							}}
 						</Query>
