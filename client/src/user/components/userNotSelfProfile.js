@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Image, Button, Card, Spinner, Alert } from 'react-bootstrap'
 
 import { Mutation } from 'react-apollo'
-import { FOLLOW, UNFOLLOW } from './../../queries/index'
+import { FOLLOW } from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import CardHeader from './../../shared/components/CardHeader'
@@ -14,28 +14,33 @@ class UserNotSelfProfile extends Component {
 	state = {
 		error: false,
 		errorMessage: '',
+		follow: this.props.currentUser.followings.includes(
+			this.props.match.params.userId
+		)
+			? true
+			: false,
 	}
 
-	handleUnFollow = async (event, unfollow) => {
-		event.preventDefault()
-		await unfollow()
-			.then(({ data }) => {
-				console.log(data)
-			})
-			.catch((err) => {
-				throw new Error(err.message)
-			})
-	}
+	// when change the follow type the DOM not updated. fix it
+	// handleUnFollow = async (event, unfollow) => {
+	// 	event.preventDefault()
+	// 	await unfollow()
+	// 		.then(({ data }) => {
+	// 			console.log(data)
+	// 		})
+	// 		.catch((err) => {
+	// 			throw new Error(err.message)
+	// 		})
+	// }
 
 	handleFollow = async (event, follow) => {
 		event.preventDefault()
 		await follow()
 			.then(({ data }) => {
 				console.log(data)
-				// this.setState({ follow: true })
+				this.setState({ follow: !this.state.follow })
 			})
 			.catch((err) => {
-				// this.setState({ follow: false })
 				throw new Error(err.message)
 			})
 	}
@@ -75,7 +80,7 @@ class UserNotSelfProfile extends Component {
 							</div>
 						</div>
 						<div className='profile__notUserSelf--btn'>
-							{this.props.currentUser.followings.includes(user._id) ? (
+							{/* {this.props.currentUser.followings.includes(user._id) ? (
 								<Mutation
 									variables={{
 										currentUserId: this.props.currentUser._id,
@@ -127,62 +132,33 @@ class UserNotSelfProfile extends Component {
 										)
 									}}
 								</Mutation>
-							)}
-							{/* {this.props.currentUser.followings.includes(user._id) ? (
-								<Mutation
-									variables={{
-										currentUserId: this.props.user._id,
-										targetUserId: this.props.match.params.userId,
-									}}
-									mutation={UNFOLLOW}
-								>
-									{(unFollow, { data, loading, error }) => {
-										if (error) {
-											this.setState({
-												error: true,
-												errorMessage: error.message,
-											})
-										}
-										return (
-											<Button
-												onClick={(event) => {
-													this.handleFollowButton(event, unFollow)
-												}}
-												variant='danger'
-											>
-												{loading ? <Spinner animation='border' /> : 'UnFollow'}
-											</Button>
-										)
-									}}
-								</Mutation> */}
+							)} */}
 
-							{/* <Mutation
+							<Mutation
 								variables={{
 									currentUserId: this.props.currentUser._id,
 									targetUserId: this.props.match.params.userId,
+									value: this.state.follow ? 'unFollow' : 'follow',
 								}}
 								mutation={FOLLOW}
 							>
-								{(follow, { data, loading, error }) => {
-									if (error) {
-										this.setState({
-											error: true,
-											errorMessage: error.message,
-										})
-									}
+								{(follow, { data, error, loading }) => {
 									return (
 										<Button
-											onClick={(event) =>
-												this.handleFollowButton(event, follow)
-											}
-											variant='success'
+											onClick={(event) => this.handleFollow(event, follow)}
+											variant={this.state.follow ? 'danger' : 'success'}
 										>
-											{loading ? <Spinner animation='border' /> : 'Follow'}
+											{loading ? (
+												<Spinner animation='border' />
+											) : this.state.follow ? (
+												'UnFollow'
+											) : (
+												'Follow'
+											)}
 										</Button>
 									)
 								}}
-							</Mutation> */}
-							{/* )} */}
+							</Mutation>
 						</div>
 					</div>
 				</div>

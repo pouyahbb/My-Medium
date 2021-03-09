@@ -99,8 +99,12 @@ export const DELETE_USER = gql`
 `
 
 export const FOLLOW = gql`
-	mutation($targetUserId: ID!, $currentUserId: ID!) {
-		follow(targetUserId: $targetUserId, currentUserId: $currentUserId) {
+	mutation($value: String!, $targetUserId: ID!, $currentUserId: ID!) {
+		follow(
+			targetUserId: $targetUserId
+			currentUserId: $currentUserId
+			value: $value
+		) {
 			_id
 			name
 			nickName
@@ -129,36 +133,36 @@ export const FOLLOW = gql`
 	}
 `
 
-export const UNFOLLOW = gql`
-	mutation($currentUserId: ID!, $targetUserId: ID!) {
-		unFollow(currentUserId: $currentUserId, targetUserId: $targetUserId) {
-			_id
-			name
-			nickName
-			email
-			password
-			passwordConfirm
-			profileImage
-			sexually
-			followers
-			followings
-			followers
-			posts {
-				_id
-				sharedUser
-				image
-				createdAt
-				description
-				likes
-				comments {
-					userId
-					text
-					createdAt
-				}
-			}
-		}
-	}
-`
+// export const UNFOLLOW = gql`
+// 	mutation($currentUserId: ID!, $targetUserId: ID!) {
+// 		unFollow(currentUserId: $currentUserId, targetUserId: $targetUserId) {
+// 			_id
+// 			name
+// 			nickName
+// 			email
+// 			password
+// 			passwordConfirm
+// 			profileImage
+// 			sexually
+// 			followers
+// 			followings
+// 			followers
+// 			posts {
+// 				_id
+// 				sharedUser
+// 				image
+// 				createdAt
+// 				description
+// 				likes
+// 				comments {
+// 					userId
+// 					text
+// 					createdAt
+// 				}
+// 			}
+// 		}
+// 	}
+// `
 
 // export const FOLLOW_USER = gql`
 // 	mutation($_id: ID!, $followType: String!, $currentUserId: ID!) {
