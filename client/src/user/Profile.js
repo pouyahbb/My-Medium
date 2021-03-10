@@ -12,6 +12,7 @@ import UserNotProfileSelf from './components/userNotSelfProfile'
 import './Profile.style.scss'
 
 class Profile extends Component {
+	// when follow or unfollow a user the followers from targetUser not update => the problem come from resolver that return currentUser not targetUser ,we need both
 	render() {
 		const { user } = this.props
 		return (

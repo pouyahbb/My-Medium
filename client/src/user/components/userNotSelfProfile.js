@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { currentUser } from './../../redux/actions/index'
 import { Image, Button, Card, Spinner, Alert } from 'react-bootstrap'
 
-import { Mutation } from 'react-apollo'
-import { FOLLOW } from './../../queries/index'
+import { Mutation, Query } from 'react-apollo'
+import { FOLLOW, GET_CURRENT_USER } from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import CardHeader from './../../shared/components/CardHeader'
@@ -20,24 +20,26 @@ class UserNotSelfProfile extends Component {
 			: false,
 	}
 
+
 	handleFollow = async (event, follow) => {
 		event.preventDefault()
 		await follow()
 			.then(({ data }) => {
-				let { follow } = data;
-				this.props.currentUser(follow);
-				console.log(data)
-				
+				let { follow } = data
+				this.props.currentUser(follow[0]);
+				console.log(follow)
+
 				this.setState({ follow: !this.state.follow })
 			})
 			.catch((err) => {
+				this.setState({ follow: false })
 				throw new Error(err.message)
 			})
 	}
 
 	render() {
 		const { targetUser, users } = this.props
-		console.log(this.props.targetUser)
+
 		return (
 			<React.Fragment key={targetUser._id}>
 				{this.state.error && (
@@ -79,6 +81,7 @@ class UserNotSelfProfile extends Component {
 								mutation={FOLLOW}
 							>
 								{(follow, { data, error, loading }) => {
+									
 									return (
 										<Button
 											onClick={(event) => this.handleFollow(event, follow)}
@@ -129,4 +132,6 @@ const mapStateToProps = (state) => {
 	return { user: state.currentUser.currentUser }
 }
 
-export default connect(mapStateToProps , { currentUser })(withRouter(UserNotSelfProfile))
+export default connect(mapStateToProps, { currentUser })(
+	withRouter(UserNotSelfProfile)
+)

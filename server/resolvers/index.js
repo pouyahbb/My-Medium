@@ -46,11 +46,10 @@ exports.resolvers = {
 			console.log(users)
 			return users
 		},
-		getCurrentUser : async (parent , { _id } , { User } , info) => {
-			let user = await User.findById({_id});
-			console.log(user)
+		getCurrentUser: async (parent, { _id }, { User }, info) => {
+			let user = await User.findById({ _id })
 			return user
-		}
+		},
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {
@@ -181,7 +180,8 @@ exports.resolvers = {
 				await targetUser.followers.push(currentUser._id)
 				await targetUser.save()
 				await currentUser.save()
-				return currentUser
+
+				return [currentUser, targetUser] 
 			} else if (value === 'unFollow') {
 				let removeFromCurrentUser = await currentUser.followings.indexOf(
 					targetUserId
@@ -195,9 +195,9 @@ exports.resolvers = {
 					await currentUser.save()
 					await targetUser.save()
 				}
-				return currentUser
+				return [currentUser, targetUser]
 			}
-			return currentUser
+			return [currentUser, targetUser]
 		},
 	},
 }
