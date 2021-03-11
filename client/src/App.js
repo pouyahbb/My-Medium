@@ -13,6 +13,7 @@ import NavBar from './shared/NavBar'
 import Signup from './user/signup'
 import Signin from './user/signin'
 import Profile from './user/Profile'
+import MyPost from './post/myPosts/myPost'
 
 class App extends React.Component {
 	render() {
@@ -36,7 +37,12 @@ class App extends React.Component {
 						<RouterProtected exact path='/' component={MainPage} />
 						<Route exact path='/signup' component={Signup} />
 						<Route exact path='/signin' component={Signin} />
-						<RouterProtected exact path={`/:userId/profile`} component={Profile} />
+						<RouterProtected
+							exact
+							path={`/:userId/profile`}
+							component={Profile}
+						/>
+						<RouterProtected exact path={'/:userId/posts'} component={MyPost} />
 						<Redirect to='/' />
 					</Switch>
 				</Router>

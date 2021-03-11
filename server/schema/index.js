@@ -4,14 +4,15 @@ exports.typeDefs = `
     getAllUsers : [User]!
     getCurrentUser(_id : ID!) : User
     getAllPosts : [Post]
+    getUserPosts (_id : ID!) : [Post]
   }
 
-  type Post {
+type Post {
     _id : ID
     sharedUser : ID
-    image : String!
+    image : String
     createdAt : String
-    description : String!
+    description : String
     likes : [String]
     comments : [Comment]
   }
@@ -49,6 +50,6 @@ exports.typeDefs = `
     deleteUser(_id : ID!) : ID!
     follow(value : String! , currentUserId : ID! , targetUserId : ID!) : [User]
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
-    
+    deletePost(_id : ID! , userId : ID!) : Post
   }
   `

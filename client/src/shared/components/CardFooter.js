@@ -11,8 +11,11 @@ import {
 
 import { Query } from 'react-apollo'
 import { GET_ALL_USERS } from './../../queries/index'
+import { withRouter } from 'react-router-dom'
 
-export default class CardHeader extends Component {
+import Moment from 'react-moment'
+
+class CardHeader extends Component {
 	state = {
 		addComment: '',
 		like: false,
@@ -125,23 +128,27 @@ export default class CardHeader extends Component {
 																		return (
 																			<React.Fragment key={usr._id}>
 																				<Image
-																					style={{ width: '10%' }}
+																					style={{ width: '10%' , cursor: 'pointer'}}
 																					src={usr.profileImage}
 																					alt={usr.name}
 																					thumbnail
 																					roundedCircle
+																					onClick = {() => {
+																						this.props.history.push(`${usr._id}/profile`)
+																					}}
 																				/>
 																				<strong>{usr.name} - </strong>
 																				<p>{comment.text}</p>
 																			</React.Fragment>
 																		)
 																	})
-																	
 															}}
 														</Query>
 													</div>
 													<div className='mainPage__comments--commentInfo'>
-														<h6> {comment.createdAt} </h6>
+														<span>
+															<Moment fromNow>{comment.createdAt}</Moment>
+														</span>
 														<span> Reply </span>
 													</div>
 												</React.Fragment>
@@ -182,3 +189,4 @@ export default class CardHeader extends Component {
 		)
 	}
 }
+export default withRouter(CardHeader)

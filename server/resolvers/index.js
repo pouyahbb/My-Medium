@@ -54,6 +54,14 @@ exports.resolvers = {
 			let posts = await Post.find()
 			return posts
 		},
+		getUserPosts : async (parent , { _id } , { User } , info) => {
+			let user = await User.findById({ _id }).populate({ 
+				path : 'posts',
+				model : 'Post'
+			})
+			console.log(user)
+			return user.posts;
+		}
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {
@@ -119,6 +127,15 @@ exports.resolvers = {
 			await findUser.save()
 			return newPost
 		},
+		deletePost : async (parent , { _id , userId} , {Post , User} , info) => {
+			let user = await User.findById(userId);
+			console.log(user)
+			let deletePost = await Post.findOneAndRemove({ _id })
+			if(!deletePost) {
+				throw new Error('Post not found.')
+			}
+			return deletePost
+		},
 		updateUserProfile: async (parent, args, { User }, info) => {
 			const {
 				name,
@@ -172,8 +189,14 @@ exports.resolvers = {
 			{ targetUserId, currentUserId, value },
 			{ User }
 		) => {
-			let currentUser = await User.findById(currentUserId)
-			let targetUser = await User.findById(targetUserId)
+			let currentUser = await User.findById(currentUserId).populate({
+				path : "posts",
+				model : "Post"
+			})
+			let targetUser = await User.findById(targetUserId).populate({
+				path: 'posts',
+				model: 'Post',
+			})
 
 			if (!targetUser) {
 				throw new Error('User not found.')
@@ -203,5 +226,9 @@ exports.resolvers = {
 			}
 			return [currentUser, targetUser]
 		},
+		
 	},
 }
+
+// handle the follow again have a little problem that when follow a user posts are null!
+// sen follow mutation in graphql to see it

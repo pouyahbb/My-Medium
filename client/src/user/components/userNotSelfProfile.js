@@ -4,7 +4,7 @@ import { currentUser } from './../../redux/actions/index'
 import { Image, Button, Card, Spinner, Alert } from 'react-bootstrap'
 
 import { Mutation, Query } from 'react-apollo'
-import { FOLLOW, GET_CURRENT_USER } from './../../queries/index'
+import { FOLLOW } from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import CardHeader from './../../shared/components/CardHeader'
@@ -27,7 +27,6 @@ class UserNotSelfProfile extends Component {
 			.then(({ data }) => {
 				let { follow } = data
 				this.props.currentUser(follow[0]);
-				console.log(follow)
 
 				this.setState({ follow: !this.state.follow })
 			})
@@ -81,7 +80,6 @@ class UserNotSelfProfile extends Component {
 								mutation={FOLLOW}
 							>
 								{(follow, { data, error, loading }) => {
-									
 									return (
 										<Button
 											onClick={(event) => this.handleFollow(event, follow)}
@@ -102,26 +100,34 @@ class UserNotSelfProfile extends Component {
 					</div>
 				</div>
 				<div className='profile__notUserSelf--posts'>
-					{targetUser.posts.map((post) => {
-						return (
-							<Card
-								style={{ width: '50%' }}
-								bg='dark'
-								text='light'
-								className='mb-2'
-								key={post.postId}
-							>
-								<CardHeader
-									users={users}
-									user={targetUser}
-									post={post}
-									showDropDowns={false}
-								/>
-								<CardBody post={post} />
-								<CardFooter users={users} post={post} user={targetUser} />
-							</Card>
-						)
-					})}
+					{targetUser.posts.length === 0 ? (
+						<React.Fragment>
+							<h4 style={{ color : "#333" }}>
+								<strong>{targetUser.name}</strong> not shared any post yet.{' '}
+							</h4>
+						</React.Fragment>
+					) : (
+						targetUser.posts.map((post) => {
+							return (
+								<Card
+									style={{ width: '50%' }}
+									bg='dark'
+									text='light'
+									className='mb-2'
+									key={post.postId}
+								>
+									<CardHeader
+										users={users}
+										user={targetUser}
+										post={post}
+										showDropDowns={false}
+									/>
+									<CardBody post={post} />
+									<CardFooter users={users} post={post} user={targetUser} />
+								</Card>
+							)
+						})
+					)}
 				</div>
 			</React.Fragment>
 		)
