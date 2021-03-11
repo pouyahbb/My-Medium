@@ -14,11 +14,11 @@ class CardHeader extends Component {
 		unfollow: false,
 	}
 
-	handleUnfollowBtn = async (event, follow) => {
-		console.log('clicked')
+	handleUnfollowBtn = async ( follow) => {
 		await follow()
 			.then(({ data }) => {
 				this.setState({ unfollow: true })
+				this.props.currentUser(data.follow[0])
 				return data
 			})
 			.catch((err) => {
@@ -87,8 +87,8 @@ class CardHeader extends Component {
 											}
 											return (
 												<Dropdown.Item
-													onClick={(event) => {
-														this.handleUnfollowBtn(event, follow)
+													onClick={() => {
+														this.handleUnfollowBtn(follow)
 													}}
 													disabled={this.state.unfollow ? true : false}
 												>

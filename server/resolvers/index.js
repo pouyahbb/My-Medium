@@ -53,14 +53,6 @@ exports.resolvers = {
 		getAllPosts: async (parent, args, { Post }, info) => {
 			let posts = await Post.find()
 			return posts
-		},
-		getUserPosts : async (parent , { _id } , { User } , info) => {
-			let user = await User.findById({ _id }).populate({ 
-				path : 'posts',
-				model : 'Post'
-			})
-			console.log(user)
-			return user.posts;
 		}
 	},
 	Mutation: {
@@ -127,11 +119,11 @@ exports.resolvers = {
 			await findUser.save()
 			return newPost
 		},
-		deletePost : async (parent , { _id , userId} , {Post , User} , info) => {
-			let user = await User.findById(userId);
+		deletePost: async (parent, { _id, userId }, { Post, User }, info) => {
+			let user = await User.findById(userId)
 			console.log(user)
 			let deletePost = await Post.findOneAndRemove({ _id })
-			if(!deletePost) {
+			if (!deletePost) {
 				throw new Error('Post not found.')
 			}
 			return deletePost
@@ -190,8 +182,8 @@ exports.resolvers = {
 			{ User }
 		) => {
 			let currentUser = await User.findById(currentUserId).populate({
-				path : "posts",
-				model : "Post"
+				path: 'posts',
+				model: 'Post',
 			})
 			let targetUser = await User.findById(targetUserId).populate({
 				path: 'posts',
@@ -226,9 +218,7 @@ exports.resolvers = {
 			}
 			return [currentUser, targetUser]
 		},
-		
 	},
 }
 
-// handle the follow again have a little problem that when follow a user posts are null!
-// sen follow mutation in graphql to see it
+// fix the mypost page errors

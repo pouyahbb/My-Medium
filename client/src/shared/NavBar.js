@@ -31,9 +31,8 @@ class NavBar extends Component {
 		modalHeader: '',
 		modalBody: null,
 		hideTooltip: false,
+		followingsModal: false,
 	}
-
-	
 
 	handleHideTooltip = () => {
 		if (this.state.searchTerm.length > 0) {
@@ -95,7 +94,27 @@ class NavBar extends Component {
 													</div>
 												</div>
 												<div className='navBar__modal--btn'>
-													<Button variant='danger'> Unfollow </Button>
+													{this.state.followingsModal ? (
+														<Button variant='danger'> Unfollow </Button>
+													) : (
+														<Button
+															variant={
+																this.props.user.followings.includes(user._id)
+																	? 'info'
+																	: 'success'
+															}
+															disabled={
+																this.props.user.followings.includes(user._id)
+																	? true
+																	: false
+															}
+														>
+															{this.props.user.followings.includes(user._id)
+																? 'Following'
+																: 'FollowBack'}
+														</Button>
+														// <Button variant='success'> FollowBack </Button>
+													)}
 												</div>
 											</React.Fragment>
 										)}
@@ -108,21 +127,21 @@ class NavBar extends Component {
 		})
 	}
 
-
-
 	showModal = (e) => {
 		const { name } = e.target
-		
+
 		this.setState({ modal: true })
 		if (name === 'followings') {
 			this.setState({
 				modalHeader: 'Followings',
 				modalBody: this.FollowersAndFollowingsModal(this.props.user.followings),
+				followingsModal: true,
 			})
 		} else if (name === 'followers') {
 			this.setState({
 				modalHeader: 'Followers',
 				modalBody: this.FollowersAndFollowingsModal(this.props.user.followers),
+				followingsModal: false,
 			})
 		}
 	}

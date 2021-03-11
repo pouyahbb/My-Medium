@@ -4,7 +4,6 @@ exports.typeDefs = `
     getAllUsers : [User]!
     getCurrentUser(_id : ID!) : User
     getAllPosts : [Post]
-    getUserPosts (_id : ID!) : [Post]
   }
 
 type Post {

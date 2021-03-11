@@ -63,24 +63,6 @@ export const GET_CURRENT_USER = gql`
 	}
 `
 
-export const GET_USER_POSTS = gql`
-	query($_id : ID!){
-		getUserPosts(_id: $_id) {
-			_id
-			sharedUser
-			image
-			createdAt
-			description
-			likes
-			comments {
-				userId
-				createdAt
-				text
-			}
-		}
-	}
-`
-
 // Mutations
 
 export const SIGN_UP = gql`

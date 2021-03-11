@@ -15,7 +15,7 @@ import { withRouter } from 'react-router-dom'
 
 import Moment from 'react-moment'
 
-class CardHeader extends Component {
+class CardFooter extends Component {
 	state = {
 		addComment: '',
 		like: false,
@@ -128,13 +128,18 @@ class CardHeader extends Component {
 																		return (
 																			<React.Fragment key={usr._id}>
 																				<Image
-																					style={{ width: '10%' , cursor: 'pointer'}}
+																					style={{
+																						width: '10%',
+																						cursor: 'pointer',
+																					}}
 																					src={usr.profileImage}
 																					alt={usr.name}
 																					thumbnail
 																					roundedCircle
-																					onClick = {() => {
-																						this.props.history.push(`${usr._id}/profile`)
+																					onClick={() => {
+																						this.props.history.push(
+																							`${usr._id}/profile`
+																						)
 																					}}
 																				/>
 																				<strong>{usr.name} - </strong>
@@ -189,4 +194,4 @@ class CardHeader extends Component {
 		)
 	}
 }
-export default withRouter(CardHeader)
+export default withRouter(CardFooter)
