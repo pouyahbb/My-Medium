@@ -50,6 +50,10 @@ exports.resolvers = {
 			let user = await User.findById({ _id })
 			return user
 		},
+		getAllPosts: async (parent, args, { Post }, info) => {
+			let posts = await Post.find()
+			return posts
+		},
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {
@@ -181,7 +185,7 @@ exports.resolvers = {
 				await targetUser.save()
 				await currentUser.save()
 
-				return [currentUser, targetUser] 
+				return [currentUser, targetUser]
 			} else if (value === 'unFollow') {
 				let removeFromCurrentUser = await currentUser.followings.indexOf(
 					targetUserId

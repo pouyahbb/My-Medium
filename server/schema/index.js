@@ -3,6 +3,7 @@ exports.typeDefs = `
   type Query {
     getAllUsers : [User]!
     getCurrentUser(_id : ID!) : User
+    getAllPosts : [Post]
   }
 
   type Post {

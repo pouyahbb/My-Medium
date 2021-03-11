@@ -1,7 +1,23 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Card, Image } from 'react-bootstrap'
 
-export default class CardHeader extends Component {
-	render() {
-		return <div>ccard body</div>
-	}
+function CardBody(props) {
+	return (
+		<Card.Body
+			style={{
+				borderBottom: '1px solid #eaeaea',
+				display: 'flex',
+				justifyContent: 'center',
+			}}
+		>
+			<Image
+				style={{ width: '80%' }}
+				alt={props.post.description}
+				src={props.post.image}
+				rounded
+			/>
+		</Card.Body>
+	)
 }
+
+export default CardBody

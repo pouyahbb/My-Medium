@@ -1,0 +1,94 @@
+.mainPage {
+	margin: 1rem auto;
+	padding: 2rem;
+	border: 1px solid #3333;
+	border-radius: 4px;
+	width: 80%;
+	background-color: #eaeaea;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	&__data {
+		&--header {
+			border-bottom: 1px solid #3333;
+			width: 80%;
+			margin-bottom: 1rem;
+			padding-bottom: 0.5rem;
+
+			img {
+				width: 20%;
+				cursor: pointer;
+			}
+
+			strong {
+				font-style: italic;
+				letter-spacing: 2px;
+			}
+		}
+		&--cmtStuff {
+			display: flex;
+			flex-direction: column;
+			span {
+				color: #ccc;
+				margin-bottom: 1rem;
+				cursor: pointer;
+			}
+		}
+	}
+
+	&__header {
+		&--rightSide {
+			display: flex;
+			span {
+				display: flex;
+				align-items: center;
+				color: #ccc;
+			}
+		}
+		&--postInfo {
+			margin-left: 2rem;
+		}
+	}
+
+	&__comments {
+		&--userInfo {
+			display: flex;
+			align-items: center;
+			margin: 1rem 0;
+			strong {
+				margin: 0.5rem;
+				font-style: italic;
+			}
+			p {
+				margin: 0.5rem;
+			}
+		}
+		&--commentInfo {
+			color: #ccc;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #eaeaea;
+
+			span {
+				&:hover {
+					color: #fff;
+				}
+			}
+		}
+
+		&--input {
+			display: flex;
+			align-items: center;
+		}
+	}
+}
+
+.card-footer {
+	i {
+		font-size: 2rem;
+		cursor: pointer;
+		margin: 1rem;
+	}
+}
