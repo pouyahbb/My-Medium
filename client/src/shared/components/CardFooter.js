@@ -44,6 +44,7 @@ class CardFooter extends Component {
 	}
 
 	render() {
+		console.log(this.props.post)
 		return (
 			<Card.Footer>
 				<i
@@ -59,7 +60,7 @@ class CardFooter extends Component {
 					style={this.state.like ? { color: 'red' } : null}
 				></i>
 				<Card.Title>
-					{this.props.post.likes.length}
+					{this.props.post.likes && this.props.post.likes.length}
 					{this.props.post.likes.length > 1 ? ' Likes' : ' Like'}
 				</Card.Title>
 				<Card.Text>

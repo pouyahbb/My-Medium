@@ -53,7 +53,7 @@ exports.resolvers = {
 		getAllPosts: async (parent, args, { Post }, info) => {
 			let posts = await Post.find()
 			return posts
-		}
+		},
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {

@@ -62,6 +62,23 @@ export const GET_CURRENT_USER = gql`
 		}
 	}
 `
+export const GET_ALL_POSTS = gql`
+	{
+		getAllPosts {
+			_id
+			sharedUser
+			image
+			createdAt
+			description
+			likes
+			comments {
+				userId
+				text
+				createdAt
+			}
+		}
+	}
+`
 
 // Mutations
 

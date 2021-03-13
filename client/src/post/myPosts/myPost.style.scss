@@ -1,5 +1,5 @@
-.myposts{
-  margin: 1rem auto;
+.myposts {
+	margin: 1rem auto;
 	padding: 2rem;
 	border: 1px solid #3333;
 	border-radius: 4px;
@@ -8,4 +8,28 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	&__btn {
+		display: flex;
+		justify-content: flex-start;
+		width: 100%;
+		margin: 3rem;
+	}
+	&__stickyBtn {
+		position: fixed;
+		right: 12%;
+		font-size: 1.5rem;
+		background-color: #333;
+		color: #fff;
+		border-radius: 4px;
+		width: 2%;
+		display: flex;
+		justify-content: center;
+		cursor: pointer;
+
+		&:hover{
+			background-color: rgb(34, 34, 34);
+			color : #eaeaea;
+		}
+	}
 }
