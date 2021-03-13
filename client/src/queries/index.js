@@ -181,3 +181,21 @@ export const FOLLOW = gql`
 	}
 `
 
+export const LIKE = gql`
+	mutation($_id: ID!, $userId: ID!, $term: String!) {
+		like(_id: $_id, userId: $userId, term: $term) {
+			_id
+			sharedUser
+			image
+			createdAt
+			description
+			likes
+			comments {
+				userId
+				text
+				createdAt
+			}
+		}
+	}
+`
+

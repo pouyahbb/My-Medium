@@ -51,5 +51,6 @@ type Post {
     follow(value : String! , currentUserId : ID! , targetUserId : ID!) : [User]
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
     deletePost(_id : ID! , userId : ID!) : Post
+    like(_id : ID! , userId : ID! , term : String!) : Post
   }
   `

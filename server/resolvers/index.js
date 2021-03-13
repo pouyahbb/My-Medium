@@ -218,6 +218,24 @@ exports.resolvers = {
 			}
 			return [currentUser, targetUser]
 		},
+		like : async (parent , { _id , userId , term  } , { Post , User } , info) => {
+			let post = await Post.findById({ _id });
+			let user = await User.findById(userId);
+			if(term === 'unLike'){
+				let unlike = await post.likes.indexOf(user._id)
+				if(unlike > -1){
+					await post.likes.splice(unlike, 1);
+					await post.save();
+					return post
+				}
+			}
+			if(term === 'like'){
+				await post.likes.push(user._id)
+				await post.save()
+				return post
+			}
+			return post
+		}
 	},
 }
 

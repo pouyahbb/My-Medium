@@ -9,8 +9,8 @@ import {
 	Alert,
 } from 'react-bootstrap'
 
-import { Query } from 'react-apollo'
-import { GET_ALL_USERS } from './../../queries/index'
+import { Query, Mutation } from 'react-apollo'
+import { GET_ALL_USERS, LIKE } from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import Moment from 'react-moment'
@@ -28,6 +28,17 @@ class CardFooter extends Component {
 			return this.setState({ like: false })
 		})
 	}
+
+	handleLike = async (event, like) => {
+		this.setState({ like: !this.state.like })
+		await like()
+			.then(({ data }) => {
+				console.log(data)
+			})
+			.catch((err) => {
+				throw new Error(err.message)
+			})
+	}
 	handleChange = (e) => {
 		const { value } = e.target
 		this.setState({ addComment: value })
@@ -44,21 +55,27 @@ class CardFooter extends Component {
 	}
 
 	render() {
-		console.log(this.props.post)
 		return (
 			<Card.Footer>
-				<i
-					onClick={() => {
-						this.setState({ like: !this.state.like })
-						if (!this.state.like) {
-							this.props.post.likes.push(this.props.user._id)
-						} else {
-							this.props.post.likes.pop(this.props.user._id)
-						}
+				<Mutation
+					mutation={LIKE}
+					variables={{
+						_id: this.props.post._id,
+						userId: this.props.user._id,
+						term: this.state.like ? 'unLike' : 'like',
 					}}
-					className={this.state.like ? 'fas fa-heart' : 'far fa-heart'}
-					style={this.state.like ? { color: 'red' } : null}
-				></i>
+				>
+					{(like, { data, loading, error }) => {
+						return (
+							<i
+								onClick={(event) => this.handleLike(event, like)}
+								className={this.state.like ? 'fas fa-heart' : 'far fa-heart'}
+								style={this.state.like ? { color: 'red' } : null}
+							></i>
+						)
+					}}
+				</Mutation>
+
 				<Card.Title>
 					{this.props.post.likes && this.props.post.likes.length}
 					{this.props.post.likes.length > 1 ? ' Likes' : ' Like'}
