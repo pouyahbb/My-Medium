@@ -42,9 +42,8 @@ class MyPost extends Component {
 							if (loading) {
 								return <Spinner animation='border' />
 							}
-							const { getAllPosts } = data
 							return this.props.user.posts.map((post) => {
-								return getAllPosts
+								return data.getAllPosts
 									.filter((pst) => {
 										return pst._id === post
 									})

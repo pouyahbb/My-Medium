@@ -21,11 +21,6 @@ export const GET_ALL_USERS = gql`
 				createdAt
 				description
 				likes
-				comments {
-					userId
-					text
-					createdAt
-				}
 			}
 			joinDate
 		}
@@ -52,11 +47,6 @@ export const GET_CURRENT_USER = gql`
 				createdAt
 				description
 				likes
-				comments {
-					userId
-					text
-					createdAt
-				}
 			}
 			joinDate
 		}
@@ -65,6 +55,24 @@ export const GET_CURRENT_USER = gql`
 export const GET_ALL_POSTS = gql`
 	{
 		getAllPosts {
+			_id
+			sharedUser
+			image
+			createdAt
+			description
+			likes
+			comments {
+				userId
+				text
+				createdAt
+			}
+		}
+	}
+`
+
+export const GET_CURRENT_POST = gql`
+	query($_id: ID!) {
+		getCurrentPost(_id: $_id) {
 			_id
 			sharedUser
 			image
@@ -170,11 +178,6 @@ export const FOLLOW = gql`
 				createdAt
 				description
 				likes
-				comments {
-					userId
-					text
-					createdAt
-				}
 			}
 			joinDate
 		}
@@ -190,12 +193,15 @@ export const LIKE = gql`
 			createdAt
 			description
 			likes
-			comments {
-				userId
-				text
-				createdAt
-			}
 		}
 	}
 `
-
+export const ADD_COMMENT = gql`
+	mutation($userId: ID!, $postId: ID!, $text: String!, $term: String!) {
+		addComment(userId: $userId, postId: $postId, term: $term, text: $text) {
+			userId
+			text
+			createdAt
+		}
+	}
+`

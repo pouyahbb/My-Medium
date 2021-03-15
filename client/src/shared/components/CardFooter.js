@@ -10,7 +10,12 @@ import {
 } from 'react-bootstrap'
 
 import { Query, Mutation } from 'react-apollo'
-import { GET_ALL_USERS, LIKE } from './../../queries/index'
+import {
+	GET_ALL_USERS,
+	LIKE,
+	ADD_COMMENT,
+	GET_CURRENT_POST,
+} from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import Moment from 'react-moment'
@@ -20,6 +25,7 @@ class CardFooter extends Component {
 		addComment: '',
 		like: false,
 	}
+
 	componentDidMount() {
 		this.props.post.likes.map((like) => {
 			if (like === this.props.user._id) {
@@ -44,14 +50,24 @@ class CardFooter extends Component {
 		this.setState({ addComment: value })
 	}
 
-	addCommentHandler = () => {
-		let newComment = {
-			userId: this.props.user._id,
-			text: this.state.addComment,
-			createdAt: Date.now(),
-		}
-		this.props.post.comments.push(newComment)
-		this.setState({ addComment: '' })
+	addCommentHandler = async (comment) => {
+		await comment()
+			.then(({ data }) => {
+				console.log(data)
+				this.setState({ addComment: '' })
+			})
+			.catch((err) => {
+				throw new Error(err.message)
+			})
+		// the comments propblem is in line 125 that toggle the posts comment but we want comment self fix that.
+
+		// let newComment = {
+		// 	userId: this.props.user._id,
+		// 	text: this.state.addComment,
+		// 	createdAt: Date.now(),
+		// }
+		// this.props.post.comments.push(newComment)
+		// this.setState({ addComment: '' })
 	}
 
 	render() {
@@ -183,29 +199,54 @@ class CardFooter extends Component {
 						</Accordion.Collapse>
 					</Accordion>
 					<div className='mainPage__comments--input'>
-						<Form.Group style={{ width: '100%' }} controlId='comment'>
-							<Form.Control
-								onChange={this.handleChange}
-								value={this.state.addComment}
-								style={{
-									backgroundColor: 'transparent',
-									color: '#eaeaea',
-									borderBottom: '1px solid #eaeaea',
-									padding: '.5rem',
-									borderRadius: '3px',
-								}}
-								name='addComment'
-								type='text'
-								placeholder='Add Comment'
-							/>
-						</Form.Group>
-						<Button
-							onClick={this.addCommentHandler}
-							variant='light'
-							style={{ marginBottom: '16px' }}
+						<Mutation
+							mutation={ADD_COMMENT}
+							variables={{
+								userId: this.props.user._id,
+								postId: this.props.post._id,
+								text: this.state.addComment,
+								term: 'add',
+							}}
 						>
-							Add
-						</Button>
+							{(addComment, { data, loading, error }) => {
+								if (error) {
+									return <Alert variant='danger'> {error.message} </Alert>
+								}
+								return (
+									<React.Fragment>
+										<Form.Group style={{ width: '100%' }} controlId='comment'>
+											<Form.Control
+												onChange={this.handleChange}
+												value={this.state.addComment}
+												style={{
+													backgroundColor: 'transparent',
+													color: '#eaeaea',
+													borderBottom: '1px solid #eaeaea',
+													padding: '.5rem',
+													borderRadius: '3px',
+												}}
+												name='addComment'
+												type='text'
+												placeholder='Add Comment'
+											/>
+										</Form.Group>
+										<Button
+											onClick={() =>
+												this.addCommentHandler(addComment)
+											}
+											disabled={loading ? true : false}
+											variant='light'
+											style={
+												(loading ? { cursor: 'not-allowed' } : null,
+												{ marginBottom: '16px' })
+											}
+										>
+											Add
+										</Button>
+									</React.Fragment>
+								)
+							}}
+						</Mutation>
 					</div>
 				</div>
 			</Card.Footer>

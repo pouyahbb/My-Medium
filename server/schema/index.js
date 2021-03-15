@@ -5,6 +5,7 @@ exports.typeDefs = `
     getAllUsers : [User]!
     getCurrentUser(_id : ID!) : User
     getAllPosts : [Post]
+    getCurrentPost(_id : ID!) : Post
   }
 
 type Post {
@@ -52,5 +53,6 @@ type Post {
     addPost(sharedUser : ID! , image : String! , description : String! ) : Post
     deletePost(_id : ID! , userId : ID!) : Post
     like(_id : ID! , userId : ID! , term : String!) : Post
+    addComment( userId : ID!, postId : ID! , term : String , text : String!) : Comment
   }
   `

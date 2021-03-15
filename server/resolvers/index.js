@@ -43,6 +43,7 @@ exports.resolvers = {
 				path: 'posts',
 				model: 'Post',
 			})
+
 			console.log(users)
 			return users
 		},
@@ -51,8 +52,18 @@ exports.resolvers = {
 			return user
 		},
 		getAllPosts: async (parent, args, { Post }, info) => {
-			let posts = await Post.find()
+			let posts = await Post.find().populate({
+				path: 'comments',
+				model: 'Comment',
+			})
 			return posts
+		},
+		getCurrentPost: async (parent, { _id }, { Post }, info) => {
+			let post = await Post.findById({ _id }).populate({
+				path: 'comments',
+				model: 'Comment',
+			})
+			return post;
 		},
 	},
 	Mutation: {
@@ -218,25 +229,41 @@ exports.resolvers = {
 			}
 			return [currentUser, targetUser]
 		},
-		like : async (parent , { _id , userId , term  } , { Post , User } , info) => {
-			let post = await Post.findById({ _id });
-			let user = await User.findById(userId);
-			if(term === 'unLike'){
+		like: async (parent, { _id, userId, term }, { Post, User }, info) => {
+			let post = await Post.findById({ _id })
+			let user = await User.findById(userId)
+			if (term === 'unLike') {
 				let unlike = await post.likes.indexOf(user._id)
-				if(unlike > -1){
-					await post.likes.splice(unlike, 1);
-					await post.save();
+				if (unlike > -1) {
+					await post.likes.splice(unlike, 1)
+					await post.save()
 					return post
 				}
 			}
-			if(term === 'like'){
+			if (term === 'like') {
 				await post.likes.push(user._id)
 				await post.save()
 				return post
 			}
 			return post
-		}
+		},
+		addComment: async (
+			parent,
+			{ userId, postId, term, text },
+			{ User, Post, Comment },
+			info
+		) => {
+			let user = await User.findById(userId)
+			let post = await Post.findById(postId)
+			let comment = await new Comment({
+				text,
+				userId,
+				postId,
+			})
+			await post.comments.push(comment)
+			await post.save()
+			await comment.save()
+			return comment
+		},
 	},
 }
-
-// fix the mypost page errors
