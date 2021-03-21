@@ -21,6 +21,11 @@ export const GET_ALL_USERS = gql`
 				createdAt
 				description
 				likes
+				comments {
+					userId
+					text
+					createdAt
+				}
 			}
 			joinDate
 		}
@@ -48,6 +53,7 @@ export const GET_CURRENT_USER = gql`
 				description
 				likes
 			}
+
 			joinDate
 		}
 	}
@@ -55,24 +61,6 @@ export const GET_CURRENT_USER = gql`
 export const GET_ALL_POSTS = gql`
 	{
 		getAllPosts {
-			_id
-			sharedUser
-			image
-			createdAt
-			description
-			likes
-			comments {
-				userId
-				text
-				createdAt
-			}
-		}
-	}
-`
-
-export const GET_CURRENT_POST = gql`
-	query($_id: ID!) {
-		getCurrentPost(_id: $_id) {
 			_id
 			sharedUser
 			image

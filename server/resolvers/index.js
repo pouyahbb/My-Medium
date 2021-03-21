@@ -42,28 +42,31 @@ exports.resolvers = {
 			let users = await User.find().populate({
 				path: 'posts',
 				model: 'Post',
+				populate: {
+					path: 'comments',
+					model: 'Comment',
+				},
 			})
 
-			console.log(users)
 			return users
 		},
 		getCurrentUser: async (parent, { _id }, { User }, info) => {
-			let user = await User.findById({ _id })
+			let user = await User.findById({ _id }).populate({
+				path: 'posts',
+				model: 'Post',
+				populate: {
+					path: 'comments',
+					model: 'Comment',
+				},
+			})
 			return user
 		},
 		getAllPosts: async (parent, args, { Post }, info) => {
 			let posts = await Post.find().populate({
 				path: 'comments',
-				model: 'Comment',
+				model: 'Comment'
 			})
 			return posts
-		},
-		getCurrentPost: async (parent, { _id }, { Post }, info) => {
-			let post = await Post.findById({ _id }).populate({
-				path: 'comments',
-				model: 'Comment',
-			})
-			return post;
 		},
 	},
 	Mutation: {
@@ -123,7 +126,14 @@ exports.resolvers = {
 				description,
 			})
 
-			let findUser = await User.findById(sharedUser)
+			let findUser = await User.findById(sharedUser).populate({
+				path: 'posts',
+				model: 'Post',
+				populate: {
+					path: 'comments',
+					model: 'Comment',
+				},
+			})
 			findUser.posts.push(newPost)
 
 			await newPost.save()
@@ -195,10 +205,18 @@ exports.resolvers = {
 			let currentUser = await User.findById(currentUserId).populate({
 				path: 'posts',
 				model: 'Post',
+				populate: {
+					path: 'comments',
+					model: 'Comment',
+				},
 			})
 			let targetUser = await User.findById(targetUserId).populate({
 				path: 'posts',
 				model: 'Post',
+				populate: {
+					path: 'comments',
+					model: 'Comment',
+				},
 			})
 
 			if (!targetUser) {

@@ -19,8 +19,8 @@ import {
 import { withRouter } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { Query } from 'react-apollo'
-import { GET_ALL_USERS } from './../queries/index'
+import { Query, Mutation } from 'react-apollo'
+import { GET_ALL_USERS, FOLLOW } from './../queries/index'
 
 import './navBar.style.scss'
 
@@ -32,6 +32,19 @@ class NavBar extends Component {
 		modalBody: null,
 		hideTooltip: false,
 		followingsModal: false,
+	}
+
+	handleFollow = async (event, follow) => {
+		event.preventDefault()
+		await follow()
+			.then(({ data }) => {
+				let { follow } = data
+				console.log(follow[0])
+				this.props.currentUser(follow[0])
+			})
+			.catch((err) => {
+				throw new Error(err.message)
+			})
 	}
 
 	handleHideTooltip = () => {
@@ -95,25 +108,108 @@ class NavBar extends Component {
 												</div>
 												<div className='navBar__modal--btn'>
 													{this.state.followingsModal ? (
-														<Button variant='danger'> Unfollow </Button>
-													) : (
-														<Button
-															variant={
-																this.props.user.followings.includes(user._id)
-																	? 'info'
-																	: 'success'
-															}
-															disabled={
-																this.props.user.followings.includes(user._id)
-																	? true
-																	: false
-															}
+														<Mutation
+															mutation={FOLLOW}
+															variables={{
+																currentUserId: this.props.user._id,
+																targetUserId: user._id,
+																value: 'unFollow',
+															}}
 														>
-															{this.props.user.followings.includes(user._id)
-																? 'Following'
-																: 'FollowBack'}
-														</Button>
-														// <Button variant='success'> FollowBack </Button>
+															{(follow, { data, loading, error }) => {
+																return (
+																	<Button
+																		variant='danger'
+																		disabled={
+																			this.props.user.followings.includes(
+																				user._id
+																			) ||
+																			(data &&
+																				data.follow[0].followings.includes(
+																					user._id
+																				))
+																				? true
+																				: false
+																		}
+																		onClick={(event) =>
+																			this.handleFollow(event, follow)
+																		}
+																	>
+																		{loading ? (
+																			<Spinner animation='border' />
+																		) : (data &&
+																				data.follow[0].followings.includes(
+																					data.follow[1]._id
+																				)) ||
+																		  this.props.user.followings.includes(
+																				user._id
+																		  ) ? (
+																			'UnFollow'
+																		) : (
+																			'UnFollowed'
+																		)}
+																	</Button>
+																)
+															}}
+														</Mutation>
+													) : (
+														<Mutation
+															mutation={FOLLOW}
+															variables={{
+																currentUserId: this.props.user._id,
+																targetUserId: user._id,
+																value: 'follow',
+															}}
+														>
+															{/* fix the problem about the followers and followings when unfollow the user model that text now show correct
+															 */}
+															{(follow, { data, loading, error }) => {
+																return (
+																	<Button
+																		variant={
+																			this.props.user.followings.includes(
+																				user._id
+																			) ||
+																			(data &&
+																				data.follow[0].followings.includes(
+																					user._id
+																				))
+																				? 'success'
+																				: 'info'
+																		}
+																		onClick={(event) =>
+																			this.handleFollow(event, follow)
+																		}
+																		disabled={
+																			this.props.user.followings.includes(
+																				user._id
+																			) ||
+																			(data &&
+																				data.follow[0].followings.includes(
+																					user._id
+																				))
+																				? true
+																				: false
+																		}
+																	>
+																		{console.log(data && data.follow[0])}
+																		{loading ? (
+																			<Spinner animation='border' />
+																		) : (data &&
+																				data.follow[0].followings.includes(
+																					data.follow[1]._id
+																				)) ||
+																		  this.props.user.followings.includes(
+																				user._id
+																		  ) ? (
+																			'Following'
+																		) : (
+																			'FollowBack'
+																		)}
+																	</Button>
+																)
+															}}
+														</Mutation>
 													)}
 												</div>
 											</React.Fragment>

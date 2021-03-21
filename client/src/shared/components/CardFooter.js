@@ -10,12 +10,7 @@ import {
 } from 'react-bootstrap'
 
 import { Query, Mutation } from 'react-apollo'
-import {
-	GET_ALL_USERS,
-	LIKE,
-	ADD_COMMENT,
-	GET_CURRENT_POST,
-} from './../../queries/index'
+import { GET_ALL_USERS, LIKE, ADD_COMMENT } from './../../queries/index'
 import { withRouter } from 'react-router-dom'
 
 import Moment from 'react-moment'
@@ -59,15 +54,6 @@ class CardFooter extends Component {
 			.catch((err) => {
 				throw new Error(err.message)
 			})
-		// the comments propblem is in line 125 that toggle the posts comment but we want comment self fix that.
-
-		// let newComment = {
-		// 	userId: this.props.user._id,
-		// 	text: this.state.addComment,
-		// 	createdAt: Date.now(),
-		// }
-		// this.props.post.comments.push(newComment)
-		// this.setState({ addComment: '' })
 	}
 
 	render() {
@@ -126,73 +112,77 @@ class CardFooter extends Component {
 							style={{ marginBottom: '1rem' }}
 							eventKey='1'
 						>
-							{this.props.post.comments.length > 1
+							{this.props.post.comments && this.props.post.comments.length > 1
 								? `Tap to view all ${this.props.post.comments.length} comments`
-								: this.props.post.comments.length === 1
+								: this.props.post.comments &&
+								  this.props.post.comments.length === 1
 								? ` Tap to view ${this.props.post.comments.length} comment`
 								: 'No comment added yet'}
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey='1'>
 							<Card.Body>
-								{this.props.post.comments.length === 0 ? (
+								{console.log(this.props.post)}
+								{this.props.post.comments &&
+								this.props.post.comments.length === 0 ? (
 									'No comment added here. '
 								) : (
 									<div className='mainPage__comments'>
-										{this.props.post.comments.map((comment) => {
-											return (
-												<React.Fragment key={comment.createdAt}>
-													<div className='mainPage__comments--userInfo'>
-														<Query query={GET_ALL_USERS}>
-															{({ data, loading, error }) => {
-																if (loading) {
-																	return <Spinner animation='border' />
-																}
-																if (error) {
-																	return (
-																		<Alert variant='danger'>
-																			{error.message}
-																		</Alert>
-																	)
-																}
-																return data.getAllUsers
-																	.filter((user) => {
-																		return user._id === comment.userId
-																	})
-																	.map((usr) => {
+										{this.props.post.comments &&
+											this.props.post.comments.map((comment) => {
+												return (
+													<React.Fragment key={comment.createdAt}>
+														<div className='mainPage__comments--userInfo'>
+															<Query query={GET_ALL_USERS}>
+																{({ data, loading, error }) => {
+																	if (loading) {
+																		return <Spinner animation='border' />
+																	}
+																	if (error) {
 																		return (
-																			<React.Fragment key={usr._id}>
-																				<Image
-																					style={{
-																						width: '10%',
-																						cursor: 'pointer',
-																					}}
-																					src={usr.profileImage}
-																					alt={usr.name}
-																					thumbnail
-																					roundedCircle
-																					onClick={() => {
-																						this.props.history.push(
-																							`${usr._id}/profile`
-																						)
-																					}}
-																				/>
-																				<strong>{usr.name} - </strong>
-																				<p>{comment.text}</p>
-																			</React.Fragment>
+																			<Alert variant='danger'>
+																				{error.message}
+																			</Alert>
 																		)
-																	})
-															}}
-														</Query>
-													</div>
-													<div className='mainPage__comments--commentInfo'>
-														<span>
-															<Moment fromNow>{comment.createdAt}</Moment>
-														</span>
-														<span> Reply </span>
-													</div>
-												</React.Fragment>
-											)
-										})}
+																	}
+																	return data.getAllUsers
+																		.filter((user) => {
+																			return user._id === comment.userId
+																		})
+																		.map((usr) => {
+																			return (
+																				<React.Fragment key={usr._id}>
+																					<Image
+																						style={{
+																							width: '10%',
+																							cursor: 'pointer',
+																						}}
+																						src={usr.profileImage}
+																						alt={usr.name}
+																						thumbnail
+																						roundedCircle
+																						onClick={() => {
+																							this.props.history.push(
+																								`${usr._id}/profile`
+																							)
+																						}}
+																					/>
+																					<strong>{usr.name} - </strong>
+																					<p>{comment.text}</p>
+																				</React.Fragment>
+																			)
+																		})
+																}}
+															</Query>
+														</div>
+														<div className='mainPage__comments--commentInfo'>
+															<span>
+																<Moment fromNow>{comment.createdAt}</Moment>
+															</span>
+															<span> Reply </span>
+														</div>
+													</React.Fragment>
+												)
+											})}
 									</div>
 								)}
 							</Card.Body>
@@ -231,17 +221,14 @@ class CardFooter extends Component {
 											/>
 										</Form.Group>
 										<Button
-											onClick={() =>
-												this.addCommentHandler(addComment)
-											}
-											disabled={loading ? true : false}
+											onClick={() => this.addCommentHandler(addComment)}
 											variant='light'
 											style={
 												(loading ? { cursor: 'not-allowed' } : null,
 												{ marginBottom: '16px' })
 											}
 										>
-											Add
+											{loading ? <Spinner animation='border' /> : 'Add'}
 										</Button>
 									</React.Fragment>
 								)
