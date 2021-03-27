@@ -14,6 +14,7 @@ import Signup from './user/signup'
 import Signin from './user/signin'
 import Profile from './user/Profile'
 import MyPost from './post/myPosts/myPost'
+import CreatePost from './post/myPosts/createPost'
 
 class App extends React.Component {
 	render() {
@@ -37,6 +38,11 @@ class App extends React.Component {
 						<RouterProtected exact path='/' component={MainPage} />
 						<Route exact path='/signup' component={Signup} />
 						<Route exact path='/signin' component={Signin} />
+						<RouterProtected
+							exact
+							path='/:userId/new/post'
+							component={CreatePost}
+						/>
 						<RouterProtected
 							exact
 							path={`/:userId/profile`}

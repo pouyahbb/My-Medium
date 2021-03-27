@@ -39,7 +39,6 @@ class NavBar extends Component {
 		await follow()
 			.then(({ data }) => {
 				let { follow } = data
-				console.log(follow[0])
 				this.props.currentUser(follow[0])
 			})
 			.catch((err) => {
@@ -119,34 +118,26 @@ class NavBar extends Component {
 															{(follow, { data, loading, error }) => {
 																return (
 																	<Button
-																		variant='danger'
-																		disabled={
-																			this.props.user.followings.includes(
-																				user._id
-																			) ||
-																			(data &&
-																				data.follow[0].followings.includes(
-																					user._id
-																				))
-																				? true
-																				: false
-																		}
+																		variant="danger"
 																		onClick={(event) =>
 																			this.handleFollow(event, follow)
 																		}
+																		// disabled={
+																		// 	this.props.user.followings.includes(
+																		// 		user._id
+																		// 	) ||
+																		// 	(data &&
+																		// 		data.follow[0].followings.includes(
+																		// 			user._id
+																		// 		))
+																		// 		? false
+																		// 		: false
+																		// }
 																	>
 																		{loading ? (
 																			<Spinner animation='border' />
-																		) : (data &&
-																				data.follow[0].followings.includes(
-																					data.follow[1]._id
-																				)) ||
-																		  this.props.user.followings.includes(
-																				user._id
-																		  ) ? (
-																			'UnFollow'
 																		) : (
-																			'UnFollowed'
+																			'UnFollow'
 																		)}
 																	</Button>
 																)
@@ -161,8 +152,7 @@ class NavBar extends Component {
 																value: 'follow',
 															}}
 														>
-															{/* fix the problem about the followers and followings when unfollow the user model that text now show correct
-															 */}
+															{/* Fix the proble from followings modal that button text not show correctly */}
 															{(follow, { data, loading, error }) => {
 																return (
 																	<Button
@@ -192,7 +182,6 @@ class NavBar extends Component {
 																				: false
 																		}
 																	>
-																		{console.log(data && data.follow[0])}
 																		{loading ? (
 																			<Spinner animation='border' />
 																		) : (data &&

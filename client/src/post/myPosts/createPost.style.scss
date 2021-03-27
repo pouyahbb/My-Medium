@@ -1,0 +1,17 @@
+.container {
+	h1 {
+		display: flex;
+		justify-content: center;
+		margin: 2rem;
+		border-bottom: 1px solid #3333;
+		padding-bottom: 1rem;
+	}
+}
+
+.createPost {
+	&__form {
+		border: 1px solid #3333;
+		border-radius: 4px;
+		padding: 2rem;
+	}
+}

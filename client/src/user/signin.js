@@ -86,7 +86,6 @@ class Signin extends Component {
 										onClick={this.handleClick}
 										className='signin__singupBtn'
 									>
-										{' '}
 										Not already have an account ? Create one{' '}
 									</span>
 								</Form>
