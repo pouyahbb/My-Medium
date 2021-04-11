@@ -64,7 +64,7 @@ exports.resolvers = {
 		getAllPosts: async (parent, args, { Post }, info) => {
 			let posts = await Post.find().populate({
 				path: 'comments',
-				model: 'Comment'
+				model: 'Comment',
 			})
 			return posts
 		},

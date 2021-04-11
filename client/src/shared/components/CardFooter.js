@@ -121,7 +121,6 @@ class CardFooter extends Component {
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey='1'>
 							<Card.Body>
-								{console.log(this.props.post)}
 								{this.props.post.comments &&
 								this.props.post.comments.length === 0 ? (
 									'No comment added here. '

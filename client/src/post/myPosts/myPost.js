@@ -15,6 +15,7 @@ class MyPost extends Component {
 	handleNewPost = () => {
 		this.props.history.push(`/${this.props.user._id}/new/post`)
 	}
+	componentDidMount() {}
 	render() {
 		const { user } = this.props
 		return (
@@ -38,7 +39,9 @@ class MyPost extends Component {
 					</React.Fragment>
 				) : (
 					<Query query={GET_ALL_POSTS}>
+						{/* when create new post the mypost page not show new post  */}
 						{({ data, loading, error }) => {
+							console.log(this.props.user)
 							if (loading) {
 								return <Spinner animation='border' />
 							}

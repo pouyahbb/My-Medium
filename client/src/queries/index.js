@@ -193,3 +193,21 @@ export const ADD_COMMENT = gql`
 		}
 	}
 `
+
+export const CREATE_POST = gql`
+	mutation($sharedUser: ID!, $image: String!, $description: String!) {
+		addPost(sharedUser: $sharedUser, image: $image, description: $description) {
+			_id
+			sharedUser
+			image
+			createdAt
+			likes
+			description
+			comments {
+				userId
+				text
+				createdAt
+			}
+		}
+	}
+`
