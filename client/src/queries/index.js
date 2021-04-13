@@ -58,6 +58,24 @@ export const GET_CURRENT_USER = gql`
 		}
 	}
 `
+export const GET_CURRENT_USER_POSTS = gql`
+	query($_id: ID!) {
+		getCurrentUserPosts(_id: $_id) {
+			_id
+			sharedUser
+			createdAt
+			description
+			likes
+			image
+			comments {
+				userId
+				text
+				createdAt
+			}
+		}
+	}
+`
+
 export const GET_ALL_POSTS = gql`
 	{
 		getAllPosts {

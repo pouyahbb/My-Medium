@@ -68,6 +68,18 @@ exports.resolvers = {
 			})
 			return posts
 		},
+		getCurrentUserPosts : async (parent , { _id } , { User , Post} , info) => {
+			let user = await User.findById({ _id }).populate({
+				path : "posts",
+				model : "Post",
+				populate : {
+					path : "comments",
+					model : "Comment"
+				}
+			})
+			console.log(user)
+			return user.posts
+		}
 	},
 	Mutation: {
 		signup: async (parent, args, { User }, info) => {

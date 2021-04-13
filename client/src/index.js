@@ -20,7 +20,11 @@ const apolloLink = createHttpLink({ uri: 'http://localhost:4444/graphql' })
 const client = new ApolloClient({
 	link: apolloLink,
 	cache: new InMemoryCache(),
+	fetchOptions: {
+		credentials: 'include',
+	},
 })
+
 
 ReactDOM.render(
 	<ApolloProvider client={client}>

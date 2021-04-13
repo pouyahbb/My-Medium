@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import defaultImage from './../../assets/images/postImage.jpg'
 
 import { Mutation } from 'react-apollo'
-import { CREATE_POST } from './../../queries/index'
+import { CREATE_POST, GET_CURRENT_USER_POSTS } from './../../queries/index'
 
 import './createPost.style.scss'
 
@@ -43,7 +43,7 @@ class CreatePost extends Component {
 		event.preventDefault()
 		await addPost()
 			.then(async ({ data }) => {
-				console.log(data)				
+				console.log(data)
 				this.props.history.push(`/${this.props.user._id}/posts`)
 			})
 			.catch((err) => {
@@ -58,6 +58,12 @@ class CreatePost extends Component {
 				<Mutation
 					mutation={CREATE_POST}
 					variables={{ image, description, sharedUser: this.props.user._id }}
+					refetchQueries={() => [
+						{
+							query: GET_CURRENT_USER_POSTS,
+							variables: { _id: this.props.user._id },
+						},
+					]}
 				>
 					{(addPost, { data, loading, error }) => {
 						return (
@@ -123,4 +129,4 @@ const mapStateToProps = (state) => {
 	return { user: state.currentUser.currentUser }
 }
 
-export default connect(mapStateToProps )(withRouter(CreatePost))
+export default connect(mapStateToProps)(withRouter(CreatePost))

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Card, Button, Alert, Spinner } from 'react-bootstrap'
 
 import { Query } from 'react-apollo'
-import { GET_ALL_POSTS } from './../../queries/index'
+import { GET_ALL_POSTS, GET_CURRENT_USER_POSTS } from './../../queries/index'
 
 import CardHeader from './../../shared/components/CardHeader'
 import CardBody from './../../shared/components/CardBody'
@@ -15,7 +15,7 @@ class MyPost extends Component {
 	handleNewPost = () => {
 		this.props.history.push(`/${this.props.user._id}/new/post`)
 	}
-	componentDidMount() {}
+
 	render() {
 		const { user } = this.props
 		return (
@@ -38,40 +38,34 @@ class MyPost extends Component {
 						</Button>
 					</React.Fragment>
 				) : (
-					<Query query={GET_ALL_POSTS}>
+					<Query
+						query={GET_CURRENT_USER_POSTS}
+						variables={{ _id: this.props.user._id }}
+					>
 						{/* when create new post the mypost page not show new post  */}
 						{({ data, loading, error }) => {
-							console.log(this.props.user)
 							if (loading) {
 								return <Spinner animation='border' />
 							}
-							return this.props.user.posts.map((post) => {
-								return data.getAllPosts
-									.filter((pst) => {
-										return pst._id === post
-									})
-									.map((usrPst) => {
-										return (
-											<Card
-												style={{ width: '50%' }}
-												bg='dark'
-												text='light'
-												className='mb-2'
-												key={usrPst._id}
-											>
-												{error && (
-													<Alert variant='danger'> {error.message} </Alert>
-												)}
-												<CardHeader
-													showDropDowns={true}
-													user={user}
-													post={usrPst}
-												/>
-												<CardBody post={usrPst} />
-												<CardFooter post={usrPst} user={user} />
-											</Card>
-										)
-									})
+							return data.getCurrentUserPosts.map((post) => {
+								return (
+									<Card
+										style={{ width: '50%' }}
+										bg='dark'
+										text='light'
+										className='mb-2'
+										key={post._id}
+									>
+										{error && <Alert variant='danger'> {error.message} </Alert>}
+										<CardHeader
+											showDropDowns={true}
+											user={user}
+											post={post}
+										/>
+										<CardBody post={post} />
+										<CardFooter post={post} user={user} />
+									</Card>
+								)
 							})
 						}}
 					</Query>
